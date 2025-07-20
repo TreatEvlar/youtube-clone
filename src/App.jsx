@@ -51,6 +51,12 @@ import {
 } from "react-icons/ri";
 import { BiMovie } from "react-icons/bi";
 import { CiStreamOn } from "react-icons/ci";
+import firstimg from "./assets/images/4552-3840x2160-desktop-4k-bugatti-wallpaper-image.jpg";
+import secondimg from "./assets/images/channels4_profile (1).jpg";
+import thirdimg from "./assets/images/channels4_profile.jpg";
+import forthimg from "./assets/images/images.png";
+import fifthimg from "./assets/images/mrbeastyoutube_llc_logo.jpeg";
+import sixthimg from "./assets/images/unnamed.png";
 
 function App() {
   const scrollRef = useRef(null);
@@ -62,6 +68,7 @@ function App() {
   const [isSidebarHidden, setIsSidebarHidden] = useState(false);
   const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 726);
   const [showSearchOverlay, setShowSearchOverlay] = useState(false);
+  
 
   const scrollLeft = () => {
     if (scrollRef.current) {
@@ -484,14 +491,14 @@ function App() {
               <Link to="/watch/dQw4w9WgXcQ" key={index} className="video-card flex flex-col">
                 <div className="relative pb-[56.25%]">
                   <img
-                    src="../src/assets/images/4552-3840x2160-desktop-4k-bugatti-wallpaper-image.jpg"
+                    src={firstimg}
                     alt="Video thumbnail"
                     className="absolute inset-0 w-full h-full object-cover rounded-xl"
                   />
                 </div>
                 <div className="flex mt-4">
                   <img
-                    src="../src/assets/images/mrbeastyoutube_llc_logo.jpeg"
+                    src={firstimg}
                     alt="Channel icon"
                     className="h-10 w-10 rounded-full object-cover mr-3"
                   />

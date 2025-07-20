@@ -55,6 +55,12 @@ import {
 } from "react-icons/ri";
 import { BiMovie } from "react-icons/bi";
 import { CiStreamOn } from "react-icons/ci";
+import firstimg from "./assets/images/4552-3840x2160-desktop-4k-bugatti-wallpaper-image.jpg";
+import secondimg from "./assets/images/channels4_profile (1).jpg";
+import thirdimg from "./assets/images/channels4_profile.jpg";
+import forthimg from "./assets/images/images.png";
+import fifthimg from "./assets/images/mrbeastyoutube_llc_logo.jpeg";
+import sixthimg from "./assets/images/unnamed.png";
 
 function App() {
   const scrollRef = useRef(null);
@@ -184,7 +190,7 @@ function App() {
       views: "1.2M views",
       time: "2 days ago",
       duration: "10:15",
-      image: "../src/assets/images/4552-3840x2160-desktop-4k-bugatti-wallpaper-image.jpg",
+      image: firstimg,
     },
     {
       id: 2,
@@ -193,7 +199,7 @@ function App() {
       views: "850K views",
       time: "1 week ago",
       duration: "15:42",
-      image: "../src/assets/images/channels4_profile (1).jpg",
+      image: secondimg,
     },
     {
       id: 3,
@@ -202,7 +208,7 @@ function App() {
       views: "2.4M views",
       time: "3 weeks ago",
       duration: "19:28",
-      image: "../src/assets/images/channels4_profile.jpg",
+      image: thirdimg,
     },
     {
       id: 4,
@@ -211,7 +217,7 @@ function App() {
       views: "350K views",
       time: "4 days ago",
       duration: "42:10",
-      image: "../src/assets/images/images.png",
+      image: forthimg,
     },
     {
       id: 5,
@@ -220,7 +226,7 @@ function App() {
       views: "560K views",
       time: "2 weeks ago",
       duration: "25:37",
-      image: "../src/assets/images/unnamed.png",
+      image: fifthimg,
     },
     {
       id: 3,
@@ -229,7 +235,7 @@ function App() {
       views: "2.4M views",
       time: "3 weeks ago",
       duration: "19:28",
-      image: "../src/assets/images/mrbeastyoutube_llc_logo.jpeg",
+      image: sixthimg,
     },
     {
       id: 4,
@@ -238,7 +244,7 @@ function App() {
       views: "350K views",
       time: "4 days ago",
       duration: "42:10",
-      image: "../src/assets/images/mrbeastyoutube_llc_logo.jpeg",
+      image: firstimg,
     },
     {
       id: 5,
@@ -247,7 +253,7 @@ function App() {
       views: "560K views",
       time: "2 weeks ago",
       duration: "25:37",
-      image: "../src/assets/images/mrbeastyoutube_llc_logo.jpeg",
+      image: fifthimg,
     },
     {
       id: 3,
@@ -256,7 +262,7 @@ function App() {
       views: "2.4M views",
       time: "3 weeks ago",
       duration: "19:28",
-      image: "../src/assets/images/mrbeastyoutube_llc_logo.jpeg",
+      image: firstimg,
     },
   ];
 
