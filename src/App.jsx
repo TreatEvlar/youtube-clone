@@ -179,11 +179,7 @@ function App() {
               <FaBars className="text-xl" />
             </div>
             <div className="logo flex items-center gap-2">
-              <img
-                src="../src/assets/images/images.png"
-                alt=""
-                className="h-6"
-              />
+              <FaYoutube className="text-[#f03] text-3xl"/>
               <span className="text-lg font-bold tracking-tighter">
                 YouTube <sup className="font-normal">IN</sup>
               </span>
@@ -229,7 +225,7 @@ function App() {
             {!isMobileView && <TbBell className="text-2xl" />}
 
             <img
-              src="../src/assets/images/4552-3840x2160-desktop-4k-bugatti-wallpaper-image.jpg"
+              src={fifthimg}
               alt=""
               className="h-8 w-8 rounded-full object-cover"
             />
