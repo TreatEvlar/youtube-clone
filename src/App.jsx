@@ -68,7 +68,6 @@ function App() {
   const [isSidebarHidden, setIsSidebarHidden] = useState(false);
   const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 726);
   const [showSearchOverlay, setShowSearchOverlay] = useState(false);
-  
 
   const scrollLeft = () => {
     if (scrollRef.current) {
@@ -82,16 +81,12 @@ function App() {
     }
   };
 
-  const updateScrollButtons = () => {
-    const el = scrollRef.current;
-    if (!el) return;
-
-    const scrollLeft = el.scrollLeft;
-    const scrollWidth = el.scrollWidth;
-    const clientWidth = el.clientWidth;
-
-    setShowLeftBtn(scrollLeft > 0);
-    setShowRightBtn(scrollLeft + clientWidth < scrollWidth - 1); // ← Fix: buffer of 1px
+  const toggleSidebar = (closeOnly = false) => {
+    if (closeOnly) {
+      setShowSidebar(false);
+    } else {
+      setShowSidebar((prev) => !prev);
+    }
   };
 
   // Change breakpoint from 1024 to 1313
@@ -101,7 +96,6 @@ function App() {
       setIsSmallScreen(window.innerWidth <= 1313);
       setIsSidebarHidden(window.innerWidth < 791);
       setIsMobileView(window.innerWidth <= 726);
-      // Optionally close sidebar if hidden
       if (window.innerWidth < 791) setShowSidebar(false);
     };
     checkScreenSize();
@@ -124,18 +118,13 @@ function App() {
 
     el.addEventListener("scroll", handleUpdate);
     window.addEventListener("resize", handleUpdate);
-    handleUpdate(); // Initial check
+    handleUpdate();
 
     return () => {
       el.removeEventListener("scroll", handleUpdate);
       window.removeEventListener("resize", handleUpdate);
     };
   }, []);
-
-  // Toggle sidebar function
-  const toggleSidebar = () => {
-    setShowSidebar((prev) => !prev);
-  };
 
   const categories = [
     "All",
@@ -170,17 +159,17 @@ function App() {
   return (
     <>
       <div className="header">
-        <nav className="w-full h-20 fixed top-0 left-0 z-50 flex justify-between items-center px-7">
-          <div className="div-left flex items-center gap-4">
+        <nav className="w-full h-20 fixed top-0 left-0 z-50 flex justify-between items-center px-3 sm:px-4 md:px-7 bg-white">
+          <div className="div-left flex items-center gap-2 sm:gap-3 md:gap-4">
             <div
               className="hamburger cursor-pointer"
               onClick={() => setShowSidebar((prev) => !prev)}
             >
               <FaBars className="text-xl" />
             </div>
-            <div className="logo flex items-center gap-2">
-              <FaYoutube className="text-[#f03] text-3xl"/>
-              <span className="text-lg font-bold tracking-tighter">
+            <div className="logo flex items-center gap-1 sm:gap-2">
+              <FaYoutube className="text-[#f03] text-2xl sm:text-3xl" />
+              <span className="text-base sm:text-lg font-bold tracking-tighter">
                 YouTube <sup className="font-normal">IN</sup>
               </span>
             </div>
@@ -210,16 +199,17 @@ function App() {
               </>
             )}
           </div>
-          <div className="div-right flex items-center gap-4">
+          <div className="div-right flex items-center gap-2 sm:gap-3 md:gap-4">
             {isMobileView && (
               <IoSearch
-                className="text-2xl cursor-pointer"
+                className="text-xl sm:text-2xl cursor-pointer"
                 onClick={() => setShowSearchOverlay(true)}
               />
             )}
 
-            <span className="flex items-center gap-1 bg-gray-100 p-1 px-4 rounded-full cursor-pointer hover:bg-gray-200">
-              <FaPlus /> Create
+            <span className="flex items-center gap-1 bg-gray-100 p-1 px-2 sm:px-4 rounded-full cursor-pointer hover:bg-gray-200">
+              <FaPlus className="text-xs sm:text-base" />
+              Create
             </span>
 
             {!isMobileView && <TbBell className="text-2xl" />}
@@ -227,13 +217,196 @@ function App() {
             <img
               src={fifthimg}
               alt=""
-              className="h-8 w-8 rounded-full object-cover"
+              className="h-7 w-7 sm:h-8 sm:w-8 rounded-full object-cover"
             />
           </div>
         </nav>
       </div>
+
+      {/* Mobile Sidebar Overlay - OUTSIDE .main for stacking */}
+      {isSmallScreen && (
+        <div
+          className={`first-section fixed top-0 left-0 w-[70vw] h-screen bg-white p-4 overflow-y-auto transform transition-transform duration-300 ease-in-out ${
+            showSidebar ? "translate-x-0" : "-translate-x-full"
+          }`}
+          style={{ zIndex: 10000 }}
+        >
+          <div className="flex items-center gap-4 mb-4 px-2">
+            <FaBars
+              className="text-xl cursor-pointer"
+              onClick={() => toggleSidebar(true)}
+            />
+            <FaYoutube className="text-[#f03] text-2xl" />
+            <span className="text-lg font-semibold tracking-tight">
+              YouTube<sup className="font-normal">IN</sup>
+            </span>
+          </div>
+          <ul className="p-2">
+            <li className="flex items-center gap-5 leading-10 bg-gray-200 rounded-md pl-2">
+              <MdHome className="text-2xl" /> <span>Home</span>
+            </li>
+            <li className="flex items-center gap-6 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <SiYoutubeshorts className="text-lg" /> <span>Shorts</span>
+            </li>
+            <li className="flex items-center gap-6 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <MdOutlineSubscriptions className="text-lg" />{" "}
+              <span>Subscriptions</span>
+            </li>
+          </ul>
+          <hr />
+          <ul className="p-2">
+            <li className="flex items-center gap-2 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <span>You</span>
+              <FaChevronRight />
+            </li>
+            <li className="flex items-center gap-6 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <FaClockRotateLeft className="text-lg" /> <span>History</span>
+            </li>
+            <li className="flex items-center gap-6 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <CgPlayList className="text-2xl" /> <span>Playlists</span>
+            </li>
+            <li className="flex items-center gap-6 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <GoVideo className="text-lg" /> <span>Your videos</span>
+            </li>
+            <li className="flex items-center gap-6 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <AiOutlineClockCircle className="text-xl" />{" "}
+              <span>Watch later</span>
+            </li>
+            <li className="flex items-center gap-6 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <AiOutlineLike className="text-xl" /> <span>Liked videos</span>
+            </li>
+          </ul>
+          <hr />
+          <ul className="p-2">
+            <li className="flex items-center gap-6 leading-10 pl-2">
+              Subscriptions
+            </li>
+            <li className="flex items-center gap-4 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <img
+                src="../src/assets/images/channels4_profile.jpg"
+                alt=""
+                className="h-7 rounded-3xl"
+              />
+              <span>YASR TV</span>
+            </li>
+            <li className="flex items-center gap-6 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <img
+                src="../src/assets/images/channels4_profile (1).jpg"
+                alt=""
+                className="h-7 rounded-3xl"
+              />
+              <span>mrnigelng</span>
+            </li>
+            <li className="flex items-center gap-6 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <img
+                src="../src/assets/images/mrbeastyoutube_llc_logo.jpeg"
+                alt=""
+                className="h-7 rounded-3xl"
+              />
+              <span>MrBeast</span>
+            </li>
+            <li className="flex items-center gap-6 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <img
+                src="../src/assets/images/unnamed.png"
+                alt=""
+                className="h-7 rounded-3xl"
+              />
+              <span>TreatEvlar</span>
+            </li>
+            <li className="flex items-center gap-6 leading-10 hover:bg-gray-200 rounded-md pl-3">
+              <AiOutlineBars /> <span>All subscriptions</span>
+            </li>
+          </ul>
+          <hr />
+          <ul className="p-2">
+            <li className="flex items-center gap-6 leading-10 pl-2">Explore</li>
+            <li className="flex items-center gap-2 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <RiMeteorLine className="text-xl" /> <span>Trending</span>
+            </li>
+            <li className="flex items-center gap-2 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <RiShoppingBag4Line className="text-xl" /> <span>Shopping</span>
+            </li>
+            <li className="flex items-center gap-2 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <IoMusicalNotesOutline className="text-xl" /> <span>Music</span>
+            </li>
+            <li className="flex items-center gap-2 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <BiMovie className="text-xl" /> <span>Movies</span>
+            </li>
+            <li className="flex items-center gap-2 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <CiStreamOn className="text-xl" /> <span>Live</span>
+            </li>
+            <li className="flex items-center gap-2 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <IoGameControllerOutline className="text-xl" />{" "}
+              <span>Gaming</span>
+            </li>
+            <li className="flex items-center gap-2 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <FaRegNewspaper className="text-xl" /> <span>News</span>
+            </li>
+            <li className="flex items-center gap-2 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <IoTrophyOutline className="text-xl" /> <span>Sports</span>
+            </li>
+            <li className="flex items-center gap-2 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <RiGraduationCapLine className="text-xl" /> <span>Courses</span>
+            </li>
+            <li className="flex items-center gap-2 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <TbHanger2 className="text-xl" /> <span>Fashion & Beauty</span>
+            </li>
+            <li className="flex items-center gap-2 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <MdOutlinePodcasts className="text-xl" /> <span>Podcasts</span>
+            </li>
+          </ul>
+          <hr />
+          <ul className="p-2">
+            <li className="flex items-center gap-6 leading-10 pl-2">
+              More from YouTube
+            </li>
+            <li className="flex items-center gap-4 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <FaYoutube className="text-xl text-red-600" />
+              <span>YASR TV</span>
+            </li>
+            <li className="flex items-center gap-6 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <SiYoutubestudio className="text-xl text-red-600" />
+              <span>mrnigelng</span>
+            </li>
+            <li className="flex items-center gap-6 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <SiYoutubemusic className="text-xl text-red-600" />
+              <span>MrBeast</span>
+            </li>
+            <li className="flex items-center gap-6 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <SiYoutubekids className="text-xl text-red-600" />
+              <span>TreatEvlar</span>
+            </li>
+          </ul>
+          <hr />
+          <ul className="p-2">
+            <li className="flex items-center gap-5 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <IoSettingsOutline className="text-2xl" /> <span>Settings</span>
+            </li>
+            <li className="flex items-center gap-6 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <RiFlagLine className="text-lg" /> <span>Report history</span>
+            </li>
+            <li className="flex items-center gap-6 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <AiOutlineQuestionCircle className="text-lg" /> <span>Help</span>
+            </li>
+            <li className="flex items-center gap-6 leading-10 hover:bg-gray-200 rounded-md pl-2">
+              <RiFeedbackLine className="text-lg" /> <span>Send feedback</span>
+            </li>
+          </ul>
+          <hr />
+          <span className="block text-sm text-left px-4 mt-4">
+            About Press Copyright <br /> Contact us Creators Advertise
+            Developers <br />
+            <br /> Terms Privacy Policy & Safety How YouTube works Test new
+            features
+          </span>
+          <span className="flex items-center text-sm m-3">
+            <MdOutlineCopyright /> &nbsp;2025 Google LLC
+          </span>
+        </div>
+      )}
+
       <div className="main pt-20 flex h-[calc(100vh-0px)] left-0 top-0 fixed overflow-x-hidden">
-        {!isSidebarHidden && (
+        {!isSidebarHidden && !isSmallScreen && (
           <div
             className={`sidebar ${
               isSmallScreen ? "block w-[8vw]" : showSidebar ? "block" : "hidden"
@@ -260,15 +433,11 @@ function App() {
           </div>
         )}
 
-        <div
-            className={`first-section ${
-              isSmallScreen
-                ? `fixed top-20 left-0 h-[calc(100vh-5rem)] w-[70vw] bg-red-400 p-2 overflow-y-auto z-40 transform transition-transform duration-300 ease-in-out ${
-                    showSidebar ? "translate-x-0" : "-translate-x-full"
-                  }`
-                : `w-[16vw]  p-2 overflow-y-auto ${
-                    showSidebar ? "hidden" : "block"
-                  }`
+        {/* Desktop sidebar */}
+        {!isSmallScreen && (
+          <div
+            className={`first-section w-[16vw] p-2 overflow-y-auto ${
+              showSidebar ? "hidden" : "block"
             }`}
           >
             <ul className="p-2">
@@ -437,12 +606,12 @@ function App() {
               <MdOutlineCopyright /> &nbsp;2025 Google LLC
             </span>
           </div>
-        
+        )}
 
         <div
           className={`second-section ${
             isSidebarHidden
-              ? "w-screen" // <-- changed from w-full to w-screen
+              ? "w-screen"
               : isSmallScreen
               ? "w-[92vw]"
               : showSidebar
@@ -484,7 +653,11 @@ function App() {
           </div>
           <div className="video-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-8">
             {[...Array(9)].map((_, index) => (
-              <Link to="/watch/dQw4w9WgXcQ" key={index} className="video-card flex flex-col">
+              <Link
+                to="/watch/dQw4w9WgXcQ"
+                key={index}
+                className="video-card flex flex-col"
+              >
                 <div className="relative pb-[56.25%]">
                   <img
                     src={firstimg}
